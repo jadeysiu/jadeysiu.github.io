@@ -1,0 +1,387 @@
+<link rel="stylesheet" href="../style.css">
+<main class="assignment-page">
+<section id="part1">
+
+    <h2>Part 1: Minimum Distance Optimization</h2>
+
+    <p>
+        Part 1 investigates methods for determining the minimum distance between
+        a given point and a nonlinear function. A point on the function can be
+        represented as (x, f(x)), allowing the Euclidean distance between the
+        curve and the given point to be written as an objective function.
+    </p>
+
+    <p>
+        Three methods are compared: an analytical solution, Newton-Raphson, and
+        golden-section search. Each method is used to determine the point on the
+        function that minimizes this distance and to calculate the corresponding
+        minimum distance.
+    </p>
+
+    <h3>1. Analytical Method</h3>
+
+    <p>
+        The analytical method finds the minimum by differentiating the
+        objective function and solving for its stationary points.
+        This gives a reference solution that can be used to verify the
+        numerical methods.
+    </p>
+
+    <div class="procedure-box">
+        <h4>General Procedure</h4>
+        <ol>
+            <li>
+                Represent a general point on the function as
+                (x, f(x)).
+            </li>
+    
+            <li>
+                Use the Euclidean distance formula between the point
+                (x, f(x)) and the given point (x<sub>p</sub>, y<sub>p</sub>):
+                <br><br>
+                d(x) = &radic;[(x - x<sub>p</sub>)&sup2; +
+                (f(x) - y<sub>p</sub>)&sup2;]
+            </li>
+    
+            <li>
+                To simplify the optimization, minimize the squared distance
+                instead:
+                <br><br>
+                D(x) = (x - x<sub>p</sub>)&sup2; +
+                (f(x) - y<sub>p</sub>)&sup2;
+            </li>
+    
+            <li>
+                Differentiate the squared-distance function to obtain D'(x).
+            </li>
+    
+            <li>
+                Set D'(x) = 0 and solve for the stationary point(s).
+            </li>
+    
+            <li>
+                Evaluate D''(x) or compare the candidate distances to confirm
+                which stationary point gives the minimum distance.
+            </li>
+    
+            <li>
+                Substitute the minimizing x-value into f(x) to obtain the
+                closest point on the curve.
+            </li>
+    
+            <li>
+                Calculate the final minimum distance using the distance formula.
+            </li>
+        </ol>
+    </div>
+
+    <p>
+        The following hand calculations show the analytical derivation used
+        to identify the minimizing value of x.
+    </p>
+
+    <div class="calculation-images">
+        <figure>
+            <img src="images/p1_analytical1.jpg"
+                 alt="Part 1 analytical hand calculations page 1"
+                 class="assignment-image">
+            <figcaption>Analytical hand calculations, page 1.</figcaption>
+        </figure>
+
+        <figure>
+            <img src="images/p1_analytical2.jpg"
+                 alt="Part 1 analytical hand calculations page 2"
+                 class="assignment-image">
+            <figcaption>Analytical hand calculations, page 2.</figcaption>
+        </figure>
+    </div>
+
+
+    <h3>2. Newton-Raphson Method</h3>
+
+    <p>
+        Newton-Raphson was used as a numerical method for finding the value of
+        x that minimizes the distance between the given point and the function.
+        The same squared-distance objective function from the analytical method
+        is used, but instead of solving its derivative directly, Newton-Raphson
+        iteratively searches for a root of D'(x).
+    </p>
+
+    <div class="equation">
+        <p>
+            x<sub>n+1</sub> =
+            x<sub>n</sub> -
+            D'(x<sub>n</sub>) / D''(x<sub>n</sub>)
+        </p>
+    </div>
+
+    <div class="procedure-box">
+        <h4>General Procedure</h4>
+
+        <ol>
+            <li>
+                Define the squared-distance objective function:
+                D(x) = (x - x<sub>p</sub>)&sup2; +
+                (f(x) - y<sub>p</sub>)&sup2;.
+            </li>
+
+            <li>
+                Calculate the first and second derivatives,
+                D'(x) and D''(x).
+            </li>
+
+            <li>
+                Select an initial guess x<sub>0</sub>.
+            </li>
+
+            <li>
+                Evaluate D'(x<sub>n</sub>) and D''(x<sub>n</sub>).
+            </li>
+
+            <li>
+                Use the Newton-Raphson update equation to calculate the next
+                estimate x<sub>n+1</sub>.
+            </li>
+
+            <li>
+                Repeat until the change between successive estimates is below
+                the selected tolerance.
+            </li>
+
+            <li>
+                Use the converged x-value to determine the closest point
+                (x, f(x)) on the function.
+            </li>
+
+            <li>
+                Calculate the minimum distance between this point and the given
+                external point.
+            </li>
+        </ol>
+    </div>
+
+    <p>
+        The following hand calculations show the Newton-Raphson update steps
+        used to iteratively approach the minimum.
+    </p>
+
+    <div class="calculation-images">
+        <figure>
+            <img src="images/p1_nr1.jpg"
+                 alt="Part 1 Newton-Raphson hand calculations page 1"
+                 class="assignment-image">
+            <figcaption>Newton-Raphson hand calculations, page 1.</figcaption>
+        </figure>
+
+        <figure>
+            <img src="images/p1_nr2.jpg"
+                 alt="Part 1 Newton-Raphson hand calculations page 2"
+                 class="assignment-image">
+            <figcaption>Newton-Raphson hand calculations, page 2.</figcaption>
+        </figure>
+    </div>
+
+    <h4>Newton-Raphson Graphs</h4>
+
+    <p>
+        Newton-Raphson was tested using several initial guesses to examine
+        how the choice of starting point affects convergence.
+    </p>
+
+    <figure>
+        <img src="images/NR_p1 (-8,0).png"
+             alt="Newton-Raphson result with initial guess negative 8"
+             class="graph-image">
+        <figcaption>Newton-Raphson result for initial guess (-8, 0).</figcaption>
+    </figure>
+
+    <figure>
+        <img src="images/NR_p1 (-4,0).png"
+             alt="Newton-Raphson result with initial guess negative 4"
+             class="graph-image">
+        <figcaption>Newton-Raphson result for initial guess (-4, 0).</figcaption>
+    </figure>
+
+    <figure>
+        <img src="images/NR_p1 (0,0).png"
+             alt="Newton-Raphson result with initial guess 0"
+             class="graph-image">
+        <figcaption>Newton-Raphson result for initial guess (0, 0).</figcaption>
+    </figure>
+
+    <figure>
+        <img src="images/NR_p1 (2,0).png"
+             alt="Newton-Raphson result with initial guess 2"
+             class="graph-image">
+        <figcaption>Newton-Raphson result for initial guess (2, 0).</figcaption>
+    </figure>
+
+    <figure>
+        <img src="images/NR_p1 (6,0).png"
+             alt="Newton-Raphson result with initial guess 6"
+             class="graph-image">
+        <figcaption>Newton-Raphson result for initial guess (6, 0).</figcaption>
+    </figure>
+
+    <p>
+        Newton-Raphson was tested using several different initial guesses.
+        The graphs show how each initial guess affects the iterative search for
+        the point on the curve that minimizes the distance to the given point.
+        Because Newton-Raphson relies on local derivative information, different
+        starting values may converge to different stationary points of the
+        distance function.
+    </p>
+
+
+    <h3>3. Golden-Section Search</h3>
+
+    <p>
+        Golden-section search was also used to determine the minimum distance
+        between the given point and the function. Unlike Newton-Raphson,
+        golden-section search does not require derivatives. Instead, it directly
+        compares values of the distance objective over a search interval and
+        progressively narrows the interval containing the minimum.
+    </p>
+
+    <div class="procedure-box">
+        <h4>General Procedure</h4>
+
+        <ol>
+            <li>
+                Define the squared-distance objective function:
+                D(x) = (x - x<sub>p</sub>)&sup2; +
+                (f(x) - y<sub>p</sub>)&sup2;.
+            </li>
+
+            <li>
+                Select an initial interval [a, b] that is expected to contain
+                the x-value corresponding to the minimum distance.
+            </li>
+
+            <li>
+                Calculate two interior points using the golden-section ratio.
+            </li>
+
+            <li>
+                Evaluate the distance objective D(x) at both interior points.
+            </li>
+
+            <li>
+                Compare the two distances and discard the portion of the interval
+                that cannot contain the minimum.
+            </li>
+
+            <li>
+                Repeat the interval reduction until the search interval becomes
+                sufficiently small.
+            </li>
+
+            <li>
+                Estimate the x-value corresponding to the minimum distance.
+            </li>
+
+            <li>
+                Substitute this value into f(x) to obtain the closest point on
+                the curve and calculate the final minimum distance.
+            </li>
+        </ol>
+    </div>
+
+    <p>
+        The hand calculations below show how the interval is reduced
+        iteratively using the golden-section ratio.
+    </p>
+
+    <div class="calculation-images">
+        <figure>
+            <img src="images/p1_gs1.jpg"
+                 alt="Golden-section search hand calculations page 1"
+                 class="assignment-image">
+            <figcaption>Golden-section search hand calculations, page 1.</figcaption>
+        </figure>
+
+        <figure>
+            <img src="images/p1_gs2.jpg"
+                 alt="Golden-section search hand calculations page 2"
+                 class="assignment-image">
+            <figcaption>Golden-section search hand calculations, page 2.</figcaption>
+        </figure>
+
+        <figure>
+            <img src="images/p1_gs3.jpg"
+                 alt="Golden-section search hand calculations page 3"
+                 class="assignment-image">
+            <figcaption>Golden-section search hand calculations, page 3.</figcaption>
+        </figure>
+    </div>
+
+    <h4>Golden-Section Search Graphs</h4>
+
+    <p>
+        The following graphs show the behavior of golden-section search
+        for different starting intervals.
+    </p>
+
+    <figure>
+        <img src="images/GS_p1 (-8,0).png"
+             alt="Golden-section search result for starting interval negative 8"
+             class="graph-image">
+        <figcaption>Golden-section search result for starting interval (-8, 0).</figcaption>
+    </figure>
+
+    <figure>
+        <img src="images/GS_p1 (-4,0).png"
+             alt="Golden-section search result for starting interval negative 4"
+             class="graph-image">
+        <figcaption>Golden-section search result for starting interval (-4, 0).</figcaption>
+    </figure>
+
+    <figure>
+        <img src="images/GS_p1 (0,0).png"
+             alt="Golden-section search result for starting interval 0"
+             class="graph-image">
+        <figcaption>Golden-section search result for starting interval (0, 0).</figcaption>
+    </figure>
+
+    <figure>
+        <img src="images/GS_p1 (2,0).png"
+             alt="Golden-section search result for starting interval 2"
+             class="graph-image">
+        <figcaption>Golden-section search result for starting interval (2, 0).</figcaption>
+    </figure>
+
+    <figure>
+        <img src="images/GS_p1 (6,0).png"
+             alt="Golden-section search result for starting interval 6"
+             class="graph-image">
+        <figcaption>Golden-section search result for starting interval (6, 0).</figcaption>
+    </figure>
+
+    <p>
+        Golden-section search is slower than Newton-Raphson, but it is more
+        robust because it does not require derivatives and only depends on
+        an interval containing the minimum.
+    </p>
+
+    <h3>4. Source Code</h3>
+
+    <p>
+        The Python implementations used for the numerical optimization methods
+        are linked below.
+    </p>
+
+    <div class="code-links">
+
+        <a href="code/A1_part1.py" target="_blank">
+            Part 1 - Newton-Raphson and Golden-Section Search Code
+        </a>
+
+        <a href="code/A1_part2.py" target="_blank">
+            Part 2 - Line/Curve Fitting via Newton-Raphson
+        </a>
+
+</div>
+
+</section>
+
+</main>

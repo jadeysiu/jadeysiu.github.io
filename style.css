@@ -1,0 +1,186 @@
+/* =========================
+   GENERAL PAGE
+   ========================= */
+
+   body {
+    margin: 0;
+    background-color: #fffafd;
+    color: #33252d;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+}
+
+main,
+header,
+footer {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-left: 40px; 
+    padding-right: 40px;
+}
+
+
+/* =========================
+   HEADINGS
+   ========================= */
+
+h1 {
+    color: #8f3f67;
+}
+
+h2 {
+    color: #8f3f67;
+    font-size: 2.2rem;
+    margin-top: 45px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid #efb6d2;
+}
+
+h3 {
+    color: #b24f7d;
+    font-size: 1.7rem;
+    margin-top: 40px;
+}
+
+h4 {
+    color: #9d4c72;
+}
+
+
+/* =========================
+   PROCEDURE BOX
+   ========================= */
+
+.procedure-box {
+    background-color: #fff0f7;
+    border: 2px solid #efb6d2;
+    border-left: 7px solid #d86b9c;
+
+    padding: 25px 35px;
+    margin: 30px 0;
+
+    border-radius: 14px;
+
+    box-shadow: 0 4px 12px rgba(185, 90, 135, 0.12);
+}
+
+.procedure-box h4 {
+    font-size: 1.6rem;
+    color: #a23f70;
+
+    margin-top: 0;
+    margin-bottom: 18px;
+}
+
+.procedure-box ol {
+    padding-left: 28px;
+    margin-bottom: 0;
+}
+
+.procedure-box li {
+    padding-left: 5px;
+    margin-bottom: 12px;
+}
+
+
+/* =========================
+   EQUATIONS
+   ========================= */
+
+.inline-equation {
+    display: block;
+
+    width: fit-content;
+
+    background-color: #ffffff;
+    border: 1px solid #f2c6db;
+
+    padding: 10px 18px;
+    margin: 15px 0 18px 0;
+
+    border-radius: 10px;
+
+    font-family: "Times New Roman", serif;
+    font-size: 1.15rem;
+}
+
+
+/* =========================
+   HAND CALCULATIONS
+   ========================= */
+
+.assignment-image {
+    width: 85%;
+    max-width: 1000px;
+    height: auto;
+
+    display: block;
+    margin: 25px auto;
+
+    border-radius: 12px;
+
+    box-shadow: 0 4px 14px rgba(121, 70, 96, 0.12);
+}
+
+
+/* =========================
+   GRAPHS
+   ========================= */
+
+.graph-image {
+    width: 85%;
+    max-width: 900px;
+    height: auto;
+
+    display: block;
+    margin: 25px auto;
+
+    border: 2px solid #f2c6db;
+    border-radius: 12px;
+
+    background-color: white;
+}
+
+
+/* =========================
+   FIGURES + CAPTIONS
+   ========================= */
+
+figure {
+    text-align: center;
+    margin: 35px 0;
+}
+
+figcaption {
+    text-align: center;
+
+    color: #8b6074;
+    font-size: 0.95rem;
+    font-style: italic;
+
+    margin-top: 8px;
+}
+
+
+/* =========================
+   LINKS
+   ========================= */
+
+a {
+    color: #b24978;
+    font-weight: 600;
+}
+
+a:hover {
+    color: #df6aa0;
+}
+
+
+/* =========================
+   TEXT SELECTION
+   ========================= */
+
+::selection {
+    background-color: #f5c7dc;
+    color: #4e2b3b;
+}
