@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SYDE 572 Assignment 2</title>
+
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+<main class="assignment-page">
+
+<p><a href="../index.html">← Back to Portfolio</a></p>
+
+<h1>Assignment 2: Linear Regression</h1>
+
+<p>
+    This assignment implements linear basis function regression with polynomial
+    and Gaussian basis functions to predict the median house value (MEDV, in $1000s)
+    of a town from 13 features describing it, using the Boston Housing dataset.
+    The first 100 observations are used as training data and the remaining 406
+    observations are used as testing data.
+</p>
+
+<div class="procedure-box">
+    <h4>General Procedure</h4>
+    <ol>
+        <li>
+            Split the data into training (first 100 observations) and testing
+            (remaining observations) sets.
+        </li>
+
+        <li>
+            Normalize each feature using the mean and standard deviation of the
+            training observations, and apply the same values to the testing data.
+            CHAS is constant (0) in the training data, so its standard deviation was
+            set to 1 to avoid dividing by zero.
+        </li>
+
+        <li>
+            Build the design matrix &Phi; by applying the basis functions to each
+            observation, with a column of ones for the bias weight.
+        </li>
+
+        <li>
+            Estimate the weights from the training data using least squares, or
+            L2-regularized least squares:
+            <span class="inline-equation">
+                w = (&Phi;<sup>T</sup>&Phi; + &lambda;I)<sup>-1</sup>&Phi;<sup>T</sup>y
+            </span>
+        </li>
+
+        <li>
+            Predict MEDV for the training and testing data using the same weights
+            and calculate the RMS error:
+            <span class="inline-equation">
+                RMSE = &radic;[ (1/N) &Sigma; (y<sub>n</sub> - &ycirc;<sub>n</sub>)&sup2; ]
+            </span>
+        </li>
+    </ol>
+</div>
+
+
+<section id="part1">
+
+    <h2>Part 1: Polynomial Basis Functions</h2>
+
+    <p>
+        The polynomial basis uses only monomials of a single variable, with no
+        cross-terms:
+    </p>
+
+    <span class="inline-equation">
+        &phi;(x) = [1, x<sub>1</sub>, x<sub>1</sub>&sup2;, &hellip;, x<sub>1</sub><sup>d</sup>,
+        x<sub>2</sub>, x<sub>2</sub>&sup2;, &hellip;, x<sub>13</sub><sup>d</sup>]
+    </span>
+
+
+    <h3>a) Training and Testing Error vs. Polynomial Degree</h3>
+
+    <figure>
+        <img src="images/P1a.png"
+             alt="Training and testing RMSE versus polynomial degree on a logarithmic scale"
+             class="graph-image">
+        <figcaption>Training and testing RMSE for polynomial degrees 1 to 7 (logarithmic y-axis).</figcaption>
+    </figure>
+
+    <table class="results-table">
+        <thead>
+            <tr><th>Degree</th><th>Training RMSE</th><th>Testing RMSE</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>2.037</td><td>36.445</td></tr>
+            <tr><td>2</td><td>1.578</td><td>1097.188</td></tr>
+            <tr><td>3</td><td>1.449</td><td>48672.818</td></tr>
+            <tr><td>4</td><td>1.270</td><td>21859310.196</td></tr>
+            <tr><td>5</td><td>1.097</td><td>18358040619.662</td></tr>
+            <tr><td>6</td><td>1.073</td><td>5024088560655.005</td></tr>
+            <tr><td>7</td><td>0.881</td><td>6879332102627000.000</td></tr>
+        </tbody>
+    </table>
+
+    <p>
+        Looking at the results, the training RMSE decreases as the polynomial degree increases. 
+        This makes sense because adding more basis functions allows the model to fit the training 
+        observations more closely. However, the testing RMSE increases significantly with each 
+        degree, suggesting that the higher-degree models are overfitting the training data rather 
+        than learning a relationship that generalizes well.
+    </p>
+
+    <p>
+        Even for degree 1, the testing error is much higher than the training error. This could 
+        be because the first 100 observations aren't representative of the entire dataset, meaning 
+        that the model encounters values in the testing data that fall outside the training range. 
+        Since higher-degree polynomial terms can grow very quickly outside this range, the 
+        predictions become increasingly extreme. Based on these results, degree 1 appears to 
+        generalize the best out of the degrees tested.
+    </p>
+
+
+    <h3>b) Degree-1 Weights</h3>
+
+    <table class="results-table">
+        <thead>
+            <tr><th>Weight</th><th>Feature</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>w<sub>0</sub></td><td>Bias</td><td>22.3090</td></tr>
+            <tr><td>w<sub>1</sub></td><td>CRIM</td><td>-1.3380</td></tr>
+            <tr><td>w<sub>2</sub></td><td>ZN</td><td>0.1230</td></tr>
+            <tr><td>w<sub>3</sub></td><td>INDUS</td><td>-0.5311</td></tr>
+            <tr><td>w<sub>4</sub></td><td>CHAS</td><td>0.0000</td></tr>
+            <tr><td>w<sub>5</sub></td><td>NOX</td><td>1.0027</td></tr>
+            <tr class="highlight-row"><td>w<sub>6</sub></td><td>RM</td><td>4.1956</td></tr>
+            <tr><td>w<sub>7</sub></td><td>AGE</td><td>-2.1663</td></tr>
+            <tr class="highlight-row"><td>w<sub>8</sub></td><td>DIS</td><td>0.0107</td></tr>
+            <tr><td>w<sub>9</sub></td><td>RAD</td><td>-0.1938</td></tr>
+            <tr><td>w<sub>10</sub></td><td>TAX</td><td>-0.3486</td></tr>
+            <tr><td>w<sub>11</sub></td><td>PTRATIO</td><td>0.2613</td></tr>
+            <tr><td>w<sub>12</sub></td><td>B</td><td>0.1811</td></tr>
+            <tr><td>w<sub>13</sub></td><td>LSTAT</td><td>0.1488</td></tr>
+        </tbody>
+    </table>
+
+    <p>
+       For the degree-1 polynomial regression, the sixth feature, RM (average number of 
+       rooms per dwelling), had a weight of 4.1956, while the eighth feature, DIS 
+       (weighted distance to employment centres), had a weight of 0.0107. Since the input 
+       features were normalized, these weights represent how much the predicted median 
+       house value changes for a one-standard-deviation increase in that feature, assuming 
+       the other features stay constant.
+
+    </p>
+
+    <p>
+        The positive weight for RM makes sense because I would expect houses with more rooms 
+        to generally have higher values. However, the weight for DIS is almost zero, suggesting 
+        that distance to employment centres doesn't have much of an independent linear 
+        relationship with house value in this model. I would have expected a greater distance 
+        to potentially lower house values because of accessibility, but other neighbourhood 
+        characteristics could also influence this relationship.
+
+    </p>
+
+    <p>
+        The CHAS weight is zero because all 100 training observations have a CHAS value of zero, 
+        so the model can't learn a relationship for that feature. The bias weight is 22.31, which 
+        corresponds to the average median house value in the training data because the input 
+        features were normalized.
+
+    </p>
+
+
+    <h3>c) One-Dimensional Polynomial Regression (ZN)</h3>
+
+    <p>
+        To visualize the regression, polynomial regression was repeated using only the second
+        feature, ZN (proportion of residential land zoned for large lots). The plots show the
+        training data, testing data and learned polynomial for degrees 1, 3 and 7.
+    </p>
+
+    <figure>
+        <img src="images/P1c(degree1)ZN.png"
+             alt="Degree 1 polynomial fit of median house value against normalized ZN"
+             class="graph-image">
+        <figcaption>Degree-1 polynomial fit using ZN.</figcaption>
+    </figure>
+
+    <p>
+        <strong>Degree 1:</strong> The degree-1 polynomial shows a weak positive linear relationship between 
+            ZN and median house value. However, looking at the graph, both the training and testing 
+            observations are spread quite far from the fitted line, suggesting that a linear 
+            relationship isn't enough to explain the variation in house values. Most observations also 
+            have a ZN value of zero, but their house values range from around 5 to 50. This makes it 
+            difficult for a model using only ZN to accurately predict house values. Although the 
+            degree-1 model is relatively stable, it may be underfitting the data.
+    </p>
+
+    <figure>
+        <img src="images/P1c(degree3)ZN.png"
+             alt="Degree 3 polynomial fit of median house value against normalized ZN"
+             class="graph-image">
+        <figcaption>Degree-3 polynomial fit using ZN.</figcaption>
+    </figure>
+
+    <p>
+        <strong>Degree 3:</strong> Increasing the polynomial degree to 3 allows the model to capture a more 
+        complex relationship between ZN and median house value. Looking at the graph, the curve stays 
+        relatively flat for smaller ZN values before increasing at higher values. However, the overall 
+        fit doesn't seem significantly better than degree 1. Since ZN only has 12 distinct values in the 
+        training data, the additional curvature doesn't appear to help explain much of the variation in the 
+        testing observations.
+    </p>
+
+    <figure>
+        <img src="images/P1c(degree7)ZN.png"
+             alt="Degree 7 polynomial fit of median house value against normalized ZN, showing large oscillations"
+             class="graph-image">
+        <figcaption>Degree-7 polynomial fit using ZN.</figcaption>
+    </figure>
+
+    <p>
+        <strong>Degree 7:</strong> The degree-7 polynomial shows what happens when we increase 
+        the model's complexity too much. Although the curve fits relatively close to the training 
+        observations, it starts oscillating significantly between the groups of data points. For 
+        example, the predicted house value drops to around 11 just above ZN = 0 before increasing 
+        to approximately 57 in a region where there aren't any training observations. These 
+        predictions don't seem reasonable compared to the testing data. This suggests that the 
+        model is overfitting and becomes particularly unreliable when making predictions in regions 
+        where it hasn't been trained.
+    </p>
+
+
+    <h3>d) L2-Regularized Regression with Cross-Validation</h3>
+
+    <p>
+        A degree-8 polynomial was fit to ZN using the first 100 observations, with each
+        &lambda; in {0, 0.01, 0.1, 1, 10, 100, 1000}. 10-fold cross-validation with shuffled
+        folds was used to select &lambda;, normalizing the feature within each fold using only
+        that fold's training observations. To check reproducibility, the cross-validation was
+        repeated with three different <code>random_state</code> values. Since &lambda; = 0 cannot
+        appear on a logarithmic axis, it is shown as a dashed horizontal line.
+    </p>
+
+    <figure>
+        <img src="images/P1d(randomstate=0).png"
+             alt="Average validation RMSE versus lambda for random state 0"
+             class="graph-image">
+        <figcaption>Average validation RMSE vs. &lambda; (random_state = 0).</figcaption>
+    </figure>
+
+    <figure>
+        <img src="images/P1d(randomstate=1).png"
+             alt="Average validation RMSE versus lambda for random state 1"
+             class="graph-image">
+        <figcaption>Average validation RMSE vs. &lambda; (random_state = 1).</figcaption>
+    </figure>
+
+    <figure>
+        <img src="images/P1d(randomstate=2).png"
+             alt="Average validation RMSE versus lambda for random state 2"
+             class="graph-image">
+        <figcaption>Average validation RMSE vs. &lambda; (random_state = 2).</figcaption>
+    </figure>
+
+    <table class="results-table">
+        <thead>
+            <tr><th>&lambda;</th><th>random_state = 0</th><th>random_state = 1</th><th>random_state = 2</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>0</td><td>13.3649</td><td>9.2249</td><td>6.5718</td></tr>
+            <tr class="highlight-row"><td>0.01</td><td>7.8242</td><td>6.7765</td><td>6.0993</td></tr>
+            <tr><td>0.1</td><td>9.8699</td><td>9.4566</td><td>8.3428</td></tr>
+            <tr><td>1</td><td>9.0486</td><td>9.3328</td><td>9.0799</td></tr>
+            <tr><td>10</td><td>9.3308</td><td>10.1711</td><td>10.0489</td></tr>
+            <tr><td>100</td><td>15.9802</td><td>15.8400</td><td>15.7632</td></tr>
+            <tr><td>1000</td><td>20.2283</td><td>19.9524</td><td>20.0427</td></tr>
+        </tbody>
+    </table>
+
+    <p>
+        Looking at the 10-fold cross-validation results, λ = 0.01 produced the lowest average 
+        validation RMSE across all three `random_state` values. It was also the only regularization 
+        value that consistently performed better than the unregularized model. For example, with 
+        `random_state = 0`, the validation RMSE decreased from 13.36 when λ = 0 to 7.82 when λ = 0.01.
+    </p>
+
+    <p>
+        This suggests that adding a small amount of L2 regularization helps prevent overfitting by 
+        limiting how large the model's weights can become, allowing it to generalize better to unseen 
+        data. However, as λ increases beyond 0.01, the validation error generally increases, 
+        suggesting that too much regularization restricts the model's ability to fit the data. At λ = 100 
+        and 1000, the model actually performs worse than when no regularization is applied.
+    </p>
+
+    <p>
+        I also tested different `random_state` values to see whether the results were reproducible. 
+        Although the actual validation RMSE values changed depending on how the observations were 
+        divided into folds, λ = 0.01 consistently produced the lowest error. Based on these results, 
+        I selected λ = 0.01 as the best regularization parameter.
+    </p>    
+
+</section>
+
+
+<section id="part2">
+
+    <h2>Part 2: Gaussian Basis Functions</h2>
+
+    <p>
+        The Gaussian basis functions use all 13 normalized features, with centres
+        &mu;<sub>j</sub> chosen as randomly selected training observations:
+    </p>
+
+    <span class="inline-equation">
+    &Phi;<sub>j</sub>(x) = exp(−(‖x − μ<sub>j</sub>‖)<sup>2</sup> / (2s<sup>2</sup>))
+</span>
+    
+    <p>
+        The width s was set to the median pairwise distance between the normalized
+        training observations.
+    </p>
+
+
+    <h3>e) Training and Testing Error vs. Number of Basis Functions</h3>
+
+    <figure>
+        <img src="images/P2e.png"
+             alt="Training and testing RMSE versus number of Gaussian basis functions"
+             class="graph-image">
+        <figcaption>Training and testing RMSE for K = 5, 15, &hellip;, 95 Gaussian basis functions.</figcaption>
+    </figure>
+
+    <table class="results-table">
+        <thead>
+            <tr><th>K</th><th>Training RMSE</th><th>Testing RMSE</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>5</td><td>2.810</td><td>8.032</td></tr>
+            <tr><td>15</td><td>2.179</td><td>8.672</td></tr>
+            <tr><td>25</td><td>1.594</td><td>7.101</td></tr>
+            <tr><td>35</td><td>1.421</td><td>7.237</td></tr>
+            <tr><td>45</td><td>1.371</td><td>7.588</td></tr>
+            <tr><td>55</td><td>1.035</td><td>15.668</td></tr>
+            <tr><td>65</td><td>1.138</td><td>6.692</td></tr>
+            <tr><td>75</td><td>0.657</td><td>20.354</td></tr>
+            <tr><td>85</td><td>0.722</td><td>33.575</td></tr>
+            <tr><td>95</td><td>0.344</td><td>50.597</td></tr>
+        </tbody>
+    </table>
+
+    <p>
+        Looking at the graph, the training RMSE generally decreases as the number of Gaussian 
+        basis functions increases. This makes sense because adding more basis functions gives 
+        the model more flexibility to fit the training observations. However, the testing RMSE 
+        doesn't follow the same trend. For smaller values of K, the testing error stays relatively 
+        consistent, but it begins fluctuating and increasing significantly as K gets larger.
+    </p>
+
+    <p>
+        At K = 95, the training RMSE is almost zero, while the testing RMSE increases to 
+        approximately 50.6. This suggests that the model is severely overfitting the training data 
+        and isn't generalizing well to unseen observations. Some of the fluctuations could also be 
+        caused by the random selection of Gaussian centres for each K, since changing the centres 
+        can affect the fitted model. This could explain why the training RMSE increases slightly at 
+        K = 65 and 85, even though more basis functions are being used.
+    </p>
+
+    <p>
+        Compared to polynomial regression in Part 1(a), the Gaussian basis functions produce much 
+        smaller testing errors. I think this is partly because Gaussian functions decrease toward 
+        zero as observations move farther away from their centres, whereas higher-degree polynomial 
+        terms can grow extremely large outside the training range. Overall, increasing the number 
+        of Gaussian basis functions doesn't necessarily mean the model will make better predictions.
+    </p>
+
+
+    <h3>f) L2-Regularized Regression with Cross-Validation</h3>
+
+    <p>
+        A Gaussian basis model with 90 basis functions was fit using all features of the first
+        100 observations, with each &lambda; in {0, 0.01, 0.1, 1, 10, 100, 1000}. 10-fold
+        cross-validation (random_state = 1) was used to select &lambda;. The unregularized
+        result (&lambda; = 0) is shown as a dashed horizontal line.
+    </p>
+
+    <figure>
+        <img src="images/P2f.png"
+             alt="Average validation RMSE versus lambda for the Gaussian basis model"
+             class="graph-image">
+        <figcaption>Average validation RMSE vs. &lambda; for 90 Gaussian basis functions.</figcaption>
+    </figure>
+
+    <table class="results-table">
+        <thead>
+            <tr><th>&lambda;</th><th>Average Validation RMSE</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>0</td><td>8.6509</td></tr>
+            <tr class="highlight-row"><td>0.01</td><td>1.7902</td></tr>
+            <tr><td>0.1</td><td>2.1231</td></tr>
+            <tr><td>1</td><td>2.9181</td></tr>
+            <tr><td>10</td><td>4.2582</td></tr>
+            <tr><td>100</td><td>5.6229</td></tr>
+            <tr><td>1000</td><td>8.2363</td></tr>
+        </tbody>
+    </table>
+
+    <p>
+       Looking at the 10-fold cross-validation results, λ = 0.01 produced the lowest average 
+       validation RMSE of approximately 1.79, compared to 8.65 when no regularization was 
+       applied. This suggests that adding a small amount of L2 regularization helps the Gaussian 
+       basis regression model generalize better by preventing the weights from becoming too large.
+    </p>
+    
+    <p>
+        Since we're using 90 Gaussian basis functions and each training fold only contains 90 
+        observations, the model has more weights than training observations. Without regularization, 
+        this gives the model enough flexibility to fit the training data very closely, which could 
+        explain why its validation error is much higher.
+    </p>
+
+    <p>
+        As λ increases beyond 0.01, the validation RMSE also increases, suggesting that too much 
+        regularization limits the model's ability to capture relationships in the data. This is 
+        consistent with what we observed in Part 2(e), where increasing the number of basis functions 
+        eventually caused the testing error to increase significantly. Based on these results, I selected 
+        λ = 0.01 as the best regularization parameter among those tested.
+    </p>
+
+</section>
+
+
+<section id="code">
+
+    <h2>Source Code</h2>
+
+    <p>
+        The Python implementations used for each part are linked below.
+    </p>
+
+    <div class="code-links">
+
+        <a href="code/A2_Part1.py" target="_blank">
+            Part 1 - Polynomial Basis Function Regression (a-d)
+        </a>
+
+        <a href="code/A2_Part2.py" target="_blank">
+            Part 2 - Gaussian Basis Function Regression (e-f)
+        </a>
+
+    </div>
+
+</section>
+
+</main>
+
+</body>
+
+</html>

@@ -184,3 +184,44 @@ a:hover {
     background-color: #f5c7dc;
     color: #4e2b3b;
 }
+
+/* =========================
+   RESULTS TABLES
+   ========================= */
+
+.results-table {
+    border-collapse: collapse;
+    margin: 25px auto;
+    min-width: 50%;
+    background-color: #ffffff;
+    font-size: 0.95rem;
+}
+
+.results-table th,
+.results-table td {
+    border: 1px solid #f2c6db;
+    padding: 8px 18px;
+    text-align: center;
+}
+
+.results-table th {
+    background-color: #fff0f7;
+    color: #8f3f67;
+}
+
+.results-table .highlight-row td {
+    background-color: #fde3ef;
+    font-weight: 600;
+}
+
+
+/* =========================
+   CODE LINKS
+   ========================= */
+
+.code-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0 50px 0;
+}

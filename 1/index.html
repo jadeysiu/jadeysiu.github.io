@@ -1,5 +1,23 @@
-<link rel="stylesheet" href="../style.css">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SYDE 572 Assignment 1</title>
+
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
 <main class="assignment-page">
+
+<p><a href="../index.html">← Back to Portfolio</a></p>
+
+<h1>Assignment 1: Optimization Methods</h1>
+
 <section id="part1">
 
     <h2>Part 1: Minimum Distance Optimization</h2>
@@ -18,6 +36,7 @@
         minimum distance.
     </p>
 
+
     <h3>1. Analytical Method</h3>
 
     <p>
@@ -29,46 +48,49 @@
 
     <div class="procedure-box">
         <h4>General Procedure</h4>
+
         <ol>
             <li>
                 Represent a general point on the function as
                 (x, f(x)).
             </li>
-    
+
             <li>
                 Use the Euclidean distance formula between the point
                 (x, f(x)) and the given point (x<sub>p</sub>, y<sub>p</sub>):
-                <br><br>
-                d(x) = &radic;[(x - x<sub>p</sub>)&sup2; +
-                (f(x) - y<sub>p</sub>)&sup2;]
+                <span class="inline-equation">
+                    d(x) = &radic;[(x - x<sub>p</sub>)&sup2; +
+                    (f(x) - y<sub>p</sub>)&sup2;]
+                </span>
             </li>
-    
+
             <li>
                 To simplify the optimization, minimize the squared distance
                 instead:
-                <br><br>
-                D(x) = (x - x<sub>p</sub>)&sup2; +
-                (f(x) - y<sub>p</sub>)&sup2;
+                <span class="inline-equation">
+                    D(x) = (x - x<sub>p</sub>)&sup2; +
+                    (f(x) - y<sub>p</sub>)&sup2;
+                </span>
             </li>
-    
+
             <li>
                 Differentiate the squared-distance function to obtain D'(x).
             </li>
-    
+
             <li>
                 Set D'(x) = 0 and solve for the stationary point(s).
             </li>
-    
+
             <li>
                 Evaluate D''(x) or compare the candidate distances to confirm
                 which stationary point gives the minimum distance.
             </li>
-    
+
             <li>
                 Substitute the minimizing x-value into f(x) to obtain the
                 closest point on the curve.
             </li>
-    
+
             <li>
                 Calculate the final minimum distance using the distance formula.
             </li>
@@ -80,21 +102,19 @@
         to identify the minimizing value of x.
     </p>
 
-    <div class="calculation-images">
-        <figure>
-            <img src="images/p1_analytical1.jpg"
-                 alt="Part 1 analytical hand calculations page 1"
-                 class="assignment-image">
-            <figcaption>Analytical hand calculations, page 1.</figcaption>
-        </figure>
+    <figure>
+        <img src="images/p1_analytical1.jpg"
+             alt="Part 1 analytical hand calculations page 1"
+             class="assignment-image">
+        <figcaption>Analytical hand calculations, page 1.</figcaption>
+    </figure>
 
-        <figure>
-            <img src="images/p1_analytical2.jpg"
-                 alt="Part 1 analytical hand calculations page 2"
-                 class="assignment-image">
-            <figcaption>Analytical hand calculations, page 2.</figcaption>
-        </figure>
-    </div>
+    <figure>
+        <img src="images/p1_analytical2.jpg"
+             alt="Part 1 analytical hand calculations page 2"
+             class="assignment-image">
+        <figcaption>Analytical hand calculations, page 2.</figcaption>
+    </figure>
 
 
     <h3>2. Newton-Raphson Method</h3>
@@ -107,13 +127,11 @@
         iteratively searches for a root of D'(x).
     </p>
 
-    <div class="equation">
-        <p>
-            x<sub>n+1</sub> =
-            x<sub>n</sub> -
-            D'(x<sub>n</sub>) / D''(x<sub>n</sub>)
-        </p>
-    </div>
+    <span class="inline-equation">
+        x<sub>n+1</sub> =
+        x<sub>n</sub> -
+        D'(x<sub>n</sub>) / D''(x<sub>n</sub>)
+    </span>
 
     <div class="procedure-box">
         <h4>General Procedure</h4>
@@ -165,21 +183,19 @@
         used to iteratively approach the minimum.
     </p>
 
-    <div class="calculation-images">
-        <figure>
-            <img src="images/p1_nr1.jpg"
-                 alt="Part 1 Newton-Raphson hand calculations page 1"
-                 class="assignment-image">
-            <figcaption>Newton-Raphson hand calculations, page 1.</figcaption>
-        </figure>
+    <figure>
+        <img src="images/p1_nr1.jpg"
+             alt="Part 1 Newton-Raphson hand calculations page 1"
+             class="assignment-image">
+        <figcaption>Newton-Raphson hand calculations, page 1.</figcaption>
+    </figure>
 
-        <figure>
-            <img src="images/p1_nr2.jpg"
-                 alt="Part 1 Newton-Raphson hand calculations page 2"
-                 class="assignment-image">
-            <figcaption>Newton-Raphson hand calculations, page 2.</figcaption>
-        </figure>
-    </div>
+    <figure>
+        <img src="images/p1_nr2.jpg"
+             alt="Part 1 Newton-Raphson hand calculations page 2"
+             class="assignment-image">
+        <figcaption>Newton-Raphson hand calculations, page 2.</figcaption>
+    </figure>
 
     <h4>Newton-Raphson Graphs</h4>
 
@@ -292,28 +308,26 @@
         iteratively using the golden-section ratio.
     </p>
 
-    <div class="calculation-images">
-        <figure>
-            <img src="images/p1_gs1.jpg"
-                 alt="Golden-section search hand calculations page 1"
-                 class="assignment-image">
-            <figcaption>Golden-section search hand calculations, page 1.</figcaption>
-        </figure>
+    <figure>
+        <img src="images/p1_gs1.jpg"
+             alt="Golden-section search hand calculations page 1"
+             class="assignment-image">
+        <figcaption>Golden-section search hand calculations, page 1.</figcaption>
+    </figure>
 
-        <figure>
-            <img src="images/p1_gs2.jpg"
-                 alt="Golden-section search hand calculations page 2"
-                 class="assignment-image">
-            <figcaption>Golden-section search hand calculations, page 2.</figcaption>
-        </figure>
+    <figure>
+        <img src="images/p1_gs2.jpg"
+             alt="Golden-section search hand calculations page 2"
+             class="assignment-image">
+        <figcaption>Golden-section search hand calculations, page 2.</figcaption>
+    </figure>
 
-        <figure>
-            <img src="images/p1_gs3.jpg"
-                 alt="Golden-section search hand calculations page 3"
-                 class="assignment-image">
-            <figcaption>Golden-section search hand calculations, page 3.</figcaption>
-        </figure>
-    </div>
+    <figure>
+        <img src="images/p1_gs3.jpg"
+             alt="Golden-section search hand calculations page 3"
+             class="assignment-image">
+        <figcaption>Golden-section search hand calculations, page 3.</figcaption>
+    </figure>
 
     <h4>Golden-Section Search Graphs</h4>
 
@@ -363,7 +377,12 @@
         an interval containing the minimum.
     </p>
 
-    <h3>4. Source Code</h3>
+</section>
+
+
+<section id="code">
+
+    <h2>Source Code</h2>
 
     <p>
         The Python implementations used for the numerical optimization methods
@@ -380,8 +399,12 @@
             Part 2 - Line/Curve Fitting via Newton-Raphson
         </a>
 
-</div>
+    </div>
 
 </section>
 
 </main>
+
+</body>
+
+</html>
